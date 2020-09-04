@@ -131,3 +131,29 @@ INSERT INTO listado_productos(factura_id, producto_id, precio_unitario, cantidad
     (9, 6, 8500, 1, 8500),
     (9, 7, 10000, 1, 10000),
     (10, 8, 280000, 1, 280000);
+
+-- Insertar información tabla clientes_facturas
+INSERT INTO clientes_facturas(cliente_id, factura_id) VALUES
+(1, 1), (1, 2), (2, 3), (2, 4), (2, 5), (3, 6), (4, 7), (4, 8), (4, 9), (4, 10);
+
+-- # CONSULTAS # --
+-- ¿Qué cliente realizó la compra más cara?
+SELECT nombre AS respuesta FROM clientes
+JOIN clientes_facturas ON clientes.id=clientes_facturas.cliente_id 
+JOIN facturas ON facturas.id=clientes_facturas.factura_id 
+ORDER BY(precio_total) DESC 
+LIMIT(1);
+
+-- ¿Qué cliente pagó sobre 100 de monto?
+SELECT nombre AS respuesta FROM clientes 
+JOIN clientes_facturas ON clientes.id=clientes_facturas.cliente_id 
+JOIN facturas ON facturas.id=clientes_facturas.factura_id 
+WHERE precio_total > 100 
+GROUP BY(nombre);
+
+-- ¿Cuántos clientes han comprado el producto 6?
+SELECT count(nombre) AS respuesta FROM clientes
+JOIN clientes_facturas ON clientes.id=clientes_facturas.cliente_id
+JOIN facturas ON facturas.id=clientes_facturas.factura_id
+JOIN listado_productos ON facturas.id=listado_productos.factura_id
+WHERE producto_id=6;
